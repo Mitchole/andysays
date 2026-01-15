@@ -1,0 +1,473 @@
+import { useState, useEffect } from "react";
+
+// 100+ button text variations
+const buttonTexts = [
+  "Hey Andy, I have a question...",
+  "Andy, I'm trying to...",
+  "Andy, can you help me with...",
+  "Andy, what if we...",
+  "Andy, I was thinking...",
+  "Andy, hear me out...",
+  "Andy, just one thing...",
+  "Andy, real quick...",
+  "Andy, I need a favor...",
+  "Andy, got a minute?",
+  "Andy, about that idea...",
+  "Andy, you know what would be cool?",
+  "Andy, I have a proposal...",
+  "Andy, before you say no...",
+  "Andy, would you ever...",
+  "Andy, is it possible to...",
+  "Andy, can we discuss...",
+  "Andy, I've been meaning to ask...",
+  "Andy, this might sound crazy but...",
+  "Andy, don't say no yet...",
+  "Andy, what's your take on...",
+  "Andy, I have a small request...",
+  "Andy, hypothetically speaking...",
+  "Andy, in theory...",
+  "Andy, just throwing this out there...",
+  "Andy, you might like this...",
+  "Andy, trust me on this one...",
+  "Andy, I promise it's quick...",
+  "Andy, no pressure but...",
+  "Andy, totally optional but...",
+  "Andy, when you have a sec...",
+  "Andy, random thought...",
+  "Andy, food for thought...",
+  "Andy, bare with me here...",
+  "Andy, I know you're busy but...",
+  "Andy, this is important...",
+  "Andy, urgent question...",
+  "Andy, time-sensitive matter...",
+  "Andy, this can't wait...",
+  "Andy, drop everything...",
+  "Andy, DEFCON 1 situation...",
+  "Andy, code red...",
+  "Andy, critical issue...",
+  "Andy, heads up...",
+  "Andy, esteemed Andy...",
+  "Dear Andy...",
+  "To Andy...",
+  "Attn: Andy...",
+  "Re: Quick Question...",
+  "Fw: Urgent Matter...",
+  "Andy, per my last message...",
+  "Andy, circling back...",
+  "Andy, following up...",
+  "Andy, touching base...",
+  "Andy, EOD question...",
+  "Andy, quick one...",
+  "Andy, wild idea...",
+  "Andy, crazy thought..."
+];
+
+// 100+ loading status variations
+const loadingStatuses = [
+  "Considering diary...",
+  "Spinning plates...",
+  "Consulting the magic 8-ball...",
+  "Checking with management...",
+  "Running it by legal...",
+  "Calculating probability of yes...",
+  "Searching for loopholes...",
+  "Reviewing ancient scrolls...",
+  "Asking the universe...",
+  "Flipping a coin...",
+  "Rolling dice...",
+  "Consulting tea leaves...",
+  "Reading palm lines...",
+  "Checking horoscope...",
+  "Summoning patience...",
+  "Loading excuses...",
+  "Generating disappointment...",
+  "Preparing rejection...",
+  "Warming up the NO...",
+  "Calibrating negativity...",
+  "Initializing denial...",
+  "Buffering refusal...",
+  "Compiling reasons...",
+  "Parsing your audacity...",
+  "Processing request... slowly...",
+  "Pretending to think about it...",
+  "Giving false hope...",
+  "Building suspense...",
+  "Dragging this out...",
+  "Making you wait...",
+  "Testing your patience...",
+  "Enjoying the silence...",
+  "Savoring the moment...",
+  "Delaying the inevitable...",
+  "Prolonging your suffering...",
+  "Stretching time...",
+  "Milking this...",
+  "Taking a dramatic pause...",
+  "Adding tension...",
+  "Creating atmosphere...",
+  "Setting the mood...",
+  "Preparing impact...",
+  "Charging up...",
+  "Powering the NO beam...",
+  "Fueling rejection rockets...",
+  "Loading disappointment cannon...",
+  "Arming the denial device...",
+  "Engaging refusal mode...",
+  "Activating pessimism protocol...",
+  "Booting negativity engine...",
+  "Starting rejection sequence...",
+  "Initiating NO protocol...",
+  "Executing denial.exe...",
+  "Running refuse.bat...",
+  "Compiling nope.js...",
+  "Building rejection.app...",
+  "Deploying disappointment...",
+  "Shipping the NO...",
+  "Releasing the kraken...",
+  "Unleashing the beast...",
+  "Opening Pandora's box...",
+  "Crossing the Rubicon...",
+  "Burning bridges...",
+  "Closing doors...",
+  "Shutting windows...",
+  "Pulling the plug...",
+  "Cutting the cord...",
+  "Breaking the news...",
+  "Dropping the bomb...",
+  "Lowering the boom...",
+  "Bringing down the hammer...",
+  "Throwing shade...",
+  "Spilling tea...",
+  "Serving cold truth...",
+  "Dishing reality...",
+  "Cooking up excuses...",
+  "Brewing rejection...",
+  "Fermenting disappointment...",
+  "Aging the NO...",
+  "Marinating in denial...",
+  "Simmering refusal...",
+  "Baking bad news...",
+  "Roasting your hopes...",
+  "Grilling your dreams...",
+  "Frying your expectations...",
+  "Toasting your aspirations...",
+  "Blending your optimism...",
+  "Juicing your enthusiasm...",
+  "Crushing your spirit...",
+  "Grinding your gears...",
+  "Pressing your buttons...",
+  "Pulling your leg...",
+  "Yanking your chain...",
+  "Ruffling your feathers...",
+  "Getting your goat...",
+  "Bursting your bubble...",
+  "Raining on your parade...",
+  "Stealing your thunder...",
+  "Killing your vibe...",
+  "Harshing your mellow...",
+  "Cramping your style...",
+  "Blocking your shine...",
+  "Dimming your sparkle...",
+  "Dulling your glow...",
+  "Muting your joy...",
+  "Silencing your hope...",
+  "Quieting your dreams...",
+  "Hushing your wishes...",
+];
+
+export default function AndySays() {
+  const [state, setState] = useState("idle"); // idle, loading, result
+  const [buttonText, setButtonText] = useState("");
+  const [loadingText, setLoadingText] = useState("");
+  const [reason, setReason] = useState("");
+  const [loadingIndex, setLoadingIndex] = useState(0);
+
+  // Set random button text on mount and after reset
+  useEffect(() => {
+    if (state === "idle") {
+      setButtonText(buttonTexts[Math.floor(Math.random() * buttonTexts.length)]);
+    }
+  }, [state]);
+
+  // Cycle through loading messages
+  useEffect(() => {
+    if (state !== "loading") return;
+    
+    const usedIndices = new Set();
+    const getRandomStatus = () => {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * loadingStatuses.length);
+      } while (usedIndices.has(idx) && usedIndices.size < loadingStatuses.length);
+      usedIndices.add(idx);
+      return loadingStatuses[idx];
+    };
+
+    setLoadingText(getRandomStatus());
+    
+    const interval = setInterval(() => {
+      setLoadingText(getRandomStatus());
+      setLoadingIndex(prev => prev + 1);
+    }, 800);
+
+    return () => clearInterval(interval);
+  }, [state]);
+
+  const handleClick = async () => {
+    setState("loading");
+    setLoadingIndex(0);
+
+    // Fetch from the API
+    try {
+      const response = await fetch("https://naas.isalman.dev/no");
+      const data = await response.json();
+      
+      // Wait a bit to build suspense (2-4 seconds total)
+      const minWait = 2000;
+      const waited = loadingIndex * 800;
+      if (waited < minWait) {
+        await new Promise(r => setTimeout(r, minWait - waited));
+      }
+      
+      setReason(data.reason);
+      setState("result");
+    } catch (error) {
+      setReason("Because I said so. That's why.");
+      setState("result");
+    }
+  };
+
+  const handleReset = () => {
+    setState("idle");
+    setReason("");
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 flex flex-col items-center justify-center p-8 overflow-hidden relative">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-20 -left-20 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-red-200/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-orange-200/20 rounded-full blur-2xl" />
+      </div>
+
+      {/* Header */}
+      <div className="relative z-10 mb-12 text-center">
+        <h1 
+          className="text-6xl md:text-8xl font-black tracking-tight"
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            background: "linear-gradient(135deg, #b45309 0%, #dc2626 50%, #9a3412 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            textShadow: "0 4px 30px rgba(180, 83, 9, 0.2)",
+          }}
+        >
+          Andy Says
+        </h1>
+        <p 
+          className="mt-4 text-amber-800/60 text-lg tracking-widest uppercase"
+          style={{ fontFamily: "'Inter', sans-serif" }}
+        >
+          The Oracle of Rejection
+        </p>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="relative z-10 w-full max-w-2xl">
+        {state === "idle" && (
+          <button
+            onClick={handleClick}
+            className="w-full group relative overflow-hidden"
+          >
+            <div 
+              className="relative px-12 py-8 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-3xl shadow-2xl shadow-orange-500/30 transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-orange-500/50 group-active:scale-[0.98]"
+            >
+              {/* Shimmer effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              
+              <span 
+                className="relative text-2xl md:text-3xl font-bold text-white drop-shadow-lg"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                {buttonText}
+              </span>
+            </div>
+          </button>
+        )}
+
+        {state === "loading" && (
+          <div className="text-center animate-pulse">
+            <div className="inline-flex items-center gap-4 px-12 py-8 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl">
+              {/* Spinning loader */}
+              <div className="relative w-12 h-12">
+                <div className="absolute inset-0 border-4 border-amber-200 rounded-full" />
+                <div className="absolute inset-0 border-4 border-transparent border-t-orange-500 rounded-full animate-spin" />
+              </div>
+              <span 
+                className="text-2xl font-semibold text-amber-800"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                {loadingText}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {state === "result" && (
+          <div className="text-center">
+            {/* Explosive NO */}
+            <div 
+              className="relative mb-8 animate-[explode_0.5s_ease-out]"
+              style={{
+                animation: "explode 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+              }}
+            >
+              <div 
+                className="text-[12rem] md:text-[16rem] font-black leading-none select-none"
+                style={{
+                  fontFamily: "'Impact', 'Arial Black', sans-serif",
+                  background: "linear-gradient(180deg, #dc2626 0%, #7f1d1d 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: "drop-shadow(0 10px 30px rgba(220, 38, 38, 0.5))",
+                  letterSpacing: "-0.05em",
+                }}
+              >
+                NO
+              </div>
+              
+              {/* Explosion particles */}
+              <div className="absolute inset-0 pointer-events-none overflow-visible">
+                {[...Array(12)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute left-1/2 top-1/2 w-4 h-4 bg-gradient-to-br from-orange-400 to-red-600 rounded-full"
+                    style={{
+                      animation: `particle${i % 4} 0.8s ease-out forwards`,
+                      animationDelay: `${i * 0.05}s`,
+                      opacity: 0,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Reason */}
+            <div 
+              className="mb-12 px-8 py-6 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-amber-100"
+              style={{
+                animation: "fadeUp 0.5s ease-out 0.3s both",
+              }}
+            >
+              <p 
+                className="text-xl md:text-2xl text-amber-900 font-medium italic"
+                style={{ fontFamily: "'Georgia', serif" }}
+              >
+                "{reason}"
+              </p>
+            </div>
+
+            {/* Try again button */}
+            <button
+              onClick={handleReset}
+              className="px-8 py-4 bg-amber-100 hover:bg-amber-200 text-amber-800 font-semibold rounded-full transition-all duration-300 hover:scale-105 active:scale-95"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                animation: "fadeUp 0.5s ease-out 0.5s both",
+              }}
+            >
+              Ask Again (spoiler: still no)
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10 mt-16 text-amber-700/50 text-sm">
+        Powered by{" "}
+        <a 
+          href="https://naas.isalman.dev/no" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="underline hover:text-amber-700 transition-colors"
+        >
+          No-as-a-Service
+        </a>
+      </div>
+
+      {/* Global styles for animations */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Inter:wght@400;500;600;700&display=swap');
+        
+        @keyframes explode {
+          0% {
+            transform: scale(0) rotate(-10deg);
+            opacity: 0;
+          }
+          50% {
+            transform: scale(1.2) rotate(5deg);
+          }
+          100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+          }
+        }
+
+        @keyframes fadeUp {
+          0% {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          100% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes particle0 {
+          0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(calc(-50% + 100px), calc(-50% - 120px)) scale(1);
+            opacity: 0;
+          }
+        }
+
+        @keyframes particle1 {
+          0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(calc(-50% - 120px), calc(-50% - 80px)) scale(1);
+            opacity: 0;
+          }
+        }
+
+        @keyframes particle2 {
+          0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(calc(-50% + 140px), calc(-50% + 60px)) scale(1);
+            opacity: 0;
+          }
+        }
+
+        @keyframes particle3 {
+          0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(calc(-50% - 80px), calc(-50% + 100px)) scale(1);
+            opacity: 0;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
