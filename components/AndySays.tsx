@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import buttonTexts from "@/data/buttonTexts.json";
 import loadingStatuses from "@/data/loadingStatuses.json";
+import { Spinner } from "@/components/ui/spinner";
 
 type AppState = "idle" | "loading" | "result";
 
@@ -111,13 +112,9 @@ export default function AndySays() {
         )}
 
         {state === "loading" && (
-          <div className="text-center animate-pulse">
+          <div className="text-center">
             <div className="inline-flex items-center gap-4 px-12 py-8 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl">
-              {/* Spinning loader */}
-              <div className="relative w-12 h-12">
-                <div className="absolute inset-0 border-4 border-amber-200 rounded-full" />
-                <div className="absolute inset-0 border-4 border-transparent border-t-orange-500 rounded-full animate-spin" />
-              </div>
+              <Spinner className="size-10 text-orange-500" />
               <span
                 className="text-2xl font-semibold text-amber-800"
                 style={{ fontFamily: "'Inter', sans-serif" }}
