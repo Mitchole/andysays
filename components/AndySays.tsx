@@ -41,7 +41,7 @@ export default function AndySays() {
     for (let i = 0; i < numStatuses; i++) {
       const status = getRandomStatus(usedIndices);
       setLoadingText(status + "...");
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
     // Now fetch from the API
